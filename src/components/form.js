@@ -50,7 +50,7 @@ const Form = ({ form, link }) => {
     } else if (link === "Login") {
       ref2.current.style.display = "none";
     }
-  }, [form]);
+  }, [form, link]);
 
   return (
     <div className="container mt-5 pt-5" style={styles}>
