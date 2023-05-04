@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import { client } from "../app/app";
+import { useNavigate } from "react-router-dom";
 
 const styles = {
   display: "flex",
@@ -12,8 +14,35 @@ const Form = ({ form, link }) => {
   const ref = useRef(null);
   const ref2 = useRef(null);
   const [state, setState] = useState({ username: "", email: "", password: "" });
+  const navigate = useNavigate();
+
   const handleChange = (event) =>
     setState({ ...state, [event.target.name]: event.target.value });
+
+  const handleSignup = async () => {
+    const data = await client.post("/createuser", {
+      username: state.username,
+      email: state.email,
+      password: state.password,
+    });
+
+    const createAccount =
+      data.data.student.message || "Account Successfully created";
+
+    if (createAccount === "Account Successfully created") {
+      navigate("/home");
+    } else {
+      navigate("/");
+    }
+
+    alert(createAccount);
+    setState({ username: "", email: "", password: "" });
+    return data;
+  };
+
+  const handleLogin = async () => {
+    await null;
+  };
 
   useEffect(() => {
     if (form === "Login") {
@@ -59,7 +88,11 @@ const Form = ({ form, link }) => {
           />
         </p>
         <p>
-          <button type="button" className="form-control bg-success">
+          <button
+            type="button"
+            className="form-control bg-success"
+            onClick={form === "login" ? handleLogin : handleSignup}
+          >
             {form}
           </button>
         </p>
