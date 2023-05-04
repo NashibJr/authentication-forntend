@@ -15,6 +15,7 @@ const Form = ({ form, link }) => {
   const ref2 = useRef(null);
   const [state, setState] = useState({ username: "", email: "", password: "" });
   const navigate = useNavigate();
+  const canSubmit = state.username && state.email && state.password;
 
   const handleChange = (event) =>
     setState({ ...state, [event.target.name]: event.target.value });
@@ -47,6 +48,7 @@ const Form = ({ form, link }) => {
   useEffect(() => {
     if (form === "Login") {
       ref.current.style.display = "none";
+      state.email = "email";
     } else if (link === "Login") {
       ref2.current.style.display = "none";
     }
@@ -91,7 +93,8 @@ const Form = ({ form, link }) => {
           <button
             type="button"
             className="form-control bg-success"
-            onClick={form === "login" ? handleLogin : handleSignup}
+            onClick={form === "Login" ? handleLogin : handleSignup}
+            disabled={!canSubmit}
           >
             {form}
           </button>
