@@ -21,28 +21,43 @@ const Form = ({ form, link }) => {
     setState({ ...state, [event.target.name]: event.target.value });
 
   const handleSignup = async () => {
-    const data = await client.post("/createuser", {
-      username: state.username,
-      email: state.email,
-      password: state.password,
-    });
+    try {
+      const data = await client.post("/createuser", {
+        username: state.username,
+        email: state.email,
+        password: state.password,
+      });
 
-    const createAccount =
-      data.data.student.message || "Account Successfully created";
+      const createAccount =
+        data.data.student.message || "Account Successfully created";
 
-    if (createAccount === "Account Successfully created") {
-      navigate("/home");
-    } else {
-      navigate("/");
+      if (createAccount === "Account Successfully created") {
+        navigate("/home");
+      } else {
+        navigate("/");
+      }
+      alert(createAccount);
+      setState({ username: "", email: "", password: "" });
+      return data;
+    } catch (error) {
+      alert(error.response.data.message.map((element) => element));
     }
-
-    alert(createAccount);
-    setState({ username: "", email: "", password: "" });
-    return data;
   };
 
   const handleLogin = async () => {
-    await null;
+    const data = await client.post("/login", {
+      username: state.username,
+      password: state.password,
+    });
+    const canContinue = data.data.user.message || "";
+    if (canContinue === "") {
+      alert("Successfully logged in");
+      navigate("/home");
+      setState({ username: "", email: "", password: "" });
+    } else {
+      alert(canContinue);
+    }
+    console.log(data);
   };
 
   useEffect(() => {
@@ -101,7 +116,8 @@ const Form = ({ form, link }) => {
         </p>
       </form>
       <p ref={ref2}>
-        Or<a href="/signup"> {link}</a>
+        Or
+        <a href="/signup"> {link}</a>
       </p>
     </div>
   );
