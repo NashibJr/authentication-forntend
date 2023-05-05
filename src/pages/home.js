@@ -2,12 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { client } from "../app/app";
 import { useSelector } from "react-redux";
 import Row from "../components/row";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([]);
   const ref = useRef();
-  const { token } = useSelector((state) => state.user.user);
+  const { token, username } = useSelector((state) => state.user.user);
+  const navigate = useNavigate();
+
   const getUsers = async () => {
     try {
       const data = await client.get("/getusers", {
@@ -27,7 +30,20 @@ const Home = () => {
   }, []);
   return (
     <div className="container mt-5">
-      <h1 ref={ref}>Welcome user.</h1>
+      <div className="row">
+        <div className="col-sm-11">
+          <h1 ref={ref}>Heyy {username}.</h1>
+        </div>
+        <div className="col-sm-1">
+          <button
+            type="button"
+            className="btn btn-dark"
+            onClick={() => navigate("/")}
+          >
+            Logout
+          </button>
+        </div>
+      </div>
       <p style={{ color: "#f00" }} className="h2">
         {error}
       </p>
