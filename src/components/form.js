@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { client } from "../app/app";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getLoggedInUser } from "../redux/users/usersSlice";
 
 const styles = {
   display: "flex",
@@ -16,6 +18,7 @@ const Form = ({ form, link }) => {
   const [state, setState] = useState({ username: "", email: "", password: "" });
   const navigate = useNavigate();
   const canSubmit = state.username && state.email && state.password;
+  const dispatch = useDispatch();
 
   const handleChange = (event) =>
     setState({ ...state, [event.target.name]: event.target.value });
@@ -57,7 +60,8 @@ const Form = ({ form, link }) => {
     } else {
       alert(canContinue);
     }
-    console.log(data);
+    dispatch(getLoggedInUser(data.data.user));
+    console.log(data.data.user);
   };
 
   useEffect(() => {
@@ -67,7 +71,7 @@ const Form = ({ form, link }) => {
     } else if (link === "Login") {
       ref2.current.style.display = "none";
     }
-  }, [form, link]);
+  }, [form, link, state]);
 
   return (
     <div className="container mt-5 pt-5" style={styles}>
