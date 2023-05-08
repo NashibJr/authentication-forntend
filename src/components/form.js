@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { client } from "../app/app";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getLoggedInUser } from "../redux/users/usersSlice";
+import { getUserData } from "../redux/users/usersSlice";
 import Input from "./inputComponent";
 
 const styles = {
@@ -17,7 +17,6 @@ const Form = ({ form, link }) => {
   const ref2 = useRef(null);
   const [state, setState] = useState({ username: "", email: "", password: "" });
   const navigate = useNavigate();
-  const canSubmit = state.username && state.email && state.password;
   const dispatch = useDispatch();
 
   const properties =
@@ -56,6 +55,10 @@ const Form = ({ form, link }) => {
             value: state.password,
           },
         ];
+  const canSubmit =
+    form === "Login"
+      ? state.username && state.password
+      : state.username && state.email && state.password;
 
   const handleChange = (event) =>
     setState({ ...state, [event.target.name]: event.target.value });
@@ -68,11 +71,13 @@ const Form = ({ form, link }) => {
         password: state.password,
       });
 
+      dispatch(getUserData(data.data.user));
+
       const createAccount =
-        data.data.student.message || "Account Successfully created";
+        data.data.user.message || "Account Successfully created";
 
       if (createAccount === "Account Successfully created") {
-        navigate("/home");
+        navigate("/comfirmation");
       } else {
         navigate("/");
       }
@@ -80,6 +85,9 @@ const Form = ({ form, link }) => {
       setState({ username: "", email: "", password: "" });
       return data;
     } catch (error) {
+      if (error) {
+        alert(error.message);
+      }
       alert(error.response.data.message.map((element) => element));
     }
   };
@@ -97,8 +105,7 @@ const Form = ({ form, link }) => {
     } else {
       alert(canContinue);
     }
-    dispatch(getLoggedInUser(data.data.user));
-    console.log(data.data.user);
+    dispatch(getUserData(data.data.user));
   };
 
   useEffect(() => {
@@ -111,12 +118,11 @@ const Form = ({ form, link }) => {
     <div className="container mt-5 pt-5" style={styles}>
       <h1>{form}</h1>
       <form className="mt-4">
-        {properties.map((property, index) => (
+        {properties.map((property) => (
           <Input
             key={property.type}
             properties={property}
             handleChange={handleChange}
-            index={index}
           />
         ))}
         <p>

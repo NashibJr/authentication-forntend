@@ -8,12 +8,12 @@ const usersSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    getLoggedInUser: (state, action) => {
+    getUserData: (state, action) => {
       state.user = action.payload;
     },
   },
 });
 
-export const { getLoggedInUser } = usersSlice.actions;
+export const { getUserData } = usersSlice.actions;
 
 export default usersSlice;

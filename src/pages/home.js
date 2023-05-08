@@ -8,6 +8,7 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([]);
   const ref = useRef();
+  const ref2 = useRef();
   const { token, username } = useSelector((state) => state.user.user);
   const navigate = useNavigate();
 
@@ -20,9 +21,11 @@ const Home = () => {
         },
       });
       setUsers(data.data.users);
+      ref2.current.style.display = "none";
     } catch (error) {
       setError(error.response.data.message);
       ref.current.style.display = "none";
+      ref2.current.style.display = "block";
     }
   };
 
@@ -40,6 +43,7 @@ const Home = () => {
             type="button"
             className="btn btn-dark"
             onClick={() => navigate("/")}
+            ref={ref}
           >
             Logout
           </button>
@@ -48,7 +52,7 @@ const Home = () => {
       <p style={{ color: "#f00" }} className="h2">
         {error}
       </p>
-      <div className="table-responsive-sm mt-5">
+      <div className="table-responsive-sm mt-5" ref={ref}>
         <p>These are some of our users</p>
         <table className="table table-hover">
           <thead>
@@ -65,6 +69,13 @@ const Home = () => {
           </tbody>
         </table>
       </div>
+      <input
+        type="button"
+        value="Activate account"
+        className="btn btn-success mt-5"
+        ref={ref2}
+        onClick={() => navigate("/comfirmation")}
+      />
     </div>
   );
 };
