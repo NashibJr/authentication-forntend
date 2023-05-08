@@ -25,6 +25,7 @@ const Home = () => {
       ref.current.style.display = "none";
     }
   };
+
   useEffect(() => {
     getUsers();
   }, []);
