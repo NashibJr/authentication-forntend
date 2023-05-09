@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "/authentication-forntend/static/js/main.c4284315.js",
+    "static/js/787.cd1cf884.chunk.js": "/authentication-forntend/static/js/787.cd1cf884.chunk.js",
+    "index.html": "/authentication-forntend/index.html",
+    "main.c4284315.js.map": "/authentication-forntend/static/js/main.c4284315.js.map",
+    "787.cd1cf884.chunk.js.map": "/authentication-forntend/static/js/787.cd1cf884.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.c4284315.js"
+  ]
+}
