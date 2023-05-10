@@ -85,27 +85,29 @@ const Form = ({ form, link }) => {
       setState({ username: "", email: "", password: "" });
       return data;
     } catch (error) {
-      if (error) {
-        alert(error.message);
-      }
+      alert(error.message);
       alert(error.response.data.message.map((element) => element));
     }
   };
 
   const handleLogin = async () => {
-    const data = await client.post("/login", {
-      username: state.username,
-      password: state.password,
-    });
-    const canContinue = data.data.user.message || "";
-    if (canContinue === "") {
-      alert("Successfully logged in");
-      navigate("/home");
-      setState({ username: "", email: "", password: "" });
-    } else {
-      alert(canContinue);
+    try {
+      const data = await client.post("/login", {
+        username: state.username,
+        password: state.password,
+      });
+      const canContinue = data.data.user.message || "";
+      if (canContinue === "") {
+        alert("Successfully logged in");
+        navigate("/home");
+        setState({ username: "", email: "", password: "" });
+      } else {
+        alert(canContinue);
+      }
+      dispatch(getUserData(data.data.user));
+    } catch (error) {
+      alert(error.message);
     }
-    dispatch(getUserData(data.data.user));
   };
 
   useEffect(() => {
